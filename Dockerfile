@@ -42,7 +42,8 @@ COPY pyproject.toml uv.lock README.md .env /app/
 RUN pip install uv==0.5.4
 
 # Install the package
-RUN uv pip install . --system
+RUN uv venv
+RUN uv pip install .
 
 # Expose the port that the app runs on
 EXPOSE 8501
