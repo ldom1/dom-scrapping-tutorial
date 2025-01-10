@@ -28,19 +28,33 @@ def dom_scrapping(url: str):
         "div", {"class": "mw-content-ltr mw-parser-output"}
     )
 
+    # If the content is not found, raise an error
+    if website_content is None:
+        raise ValueError("The content is not found...")
+
     # Summarize the content with Mistral AI
+    if config.MISTRAL_API_KEY is None:
+        raise ValueError(
+            "Mistral API key is not set... Please set the API key!"
+        )
+
     client = Mistral(api_key=config.MISTRAL_API_KEY)
 
     config.logger.info("Summarizing the website content...")
-    chat_response = client.chat.complete(
-        model=constant.MISTRAL_AI_MODEL,
-        messages=[
-            {
-                "role": "user",
-                "content": f"Summarize the following content: {website_content}",
-            },
-        ],
-    )
+
+    try:
+        chat_response = client.chat.complete(
+            model=constant.MISTRAL_AI_MODEL,
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Summarize the following content: {website_content}",
+                },
+            ],
+        )
+    except Exception as e:
+        config.logger.error(f"Failed to summarize the content: {e}")
+        raise e
 
     config.logger.info(f"Chat response: {chat_response}")
 
