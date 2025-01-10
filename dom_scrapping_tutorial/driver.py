@@ -39,9 +39,9 @@ def get_local_web_driver():
     return driver
 
 
-def get_aws_lambda_web_driver():
+def get_remote_web_driver():
     """
-    Initialize a Chrome driver for AWS Lambda.
+    Initialize a Chrome driver for remote.
 
     :return: selenium.webdriver.Chrome
     """
@@ -84,11 +84,9 @@ def get_web_driver() -> selenium.webdriver.Chrome:
     if config.RUN_ENV == constant.RUN_ENV_LOCAL:
         config.logger.info("Running locally - using local Chrome driver")
         driver = get_local_web_driver()
-    elif config.RUN_ENV == constant.RUN_ENV_AWS_LAMBDA:
-        config.logger.info(
-            "Running on AWS Lambda - using AWS Lambda Chrome driver"
-        )
-        driver = get_aws_lambda_web_driver()
+    elif config.RUN_ENV == constant.RUN_ENV_REMOTE:
+        config.logger.info("Running remotely - using Remote Chrome driver")
+        driver = get_remote_web_driver()
     else:
         config.logger.error("Invalid job type")
         raise ValueError("Invalid job type")
